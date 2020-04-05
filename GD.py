@@ -2,6 +2,7 @@ import numpy as np
 import pandas as pd
 from sklearn.model_selection import train_test_split
 from sklearn.preprocessing import LabelEncoder
+from sklearn.metrics import mean_squared_error
 
 # Reading file and seperating dependent and independent variables.
 dataset = pd.read_excel("irisdataset.xlsx")
@@ -18,7 +19,6 @@ X_train,X_test, y_train, y_test = train_test_split(X, y, test_size=0.5, random_s
 
 # random weight vector
 weight = np.random.rand(4, 1)
-
 
 
 

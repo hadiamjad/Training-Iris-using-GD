@@ -1,16 +1,26 @@
 import numpy as np
 import pandas as pd
 from sklearn.model_selection import train_test_split
+from sklearn.preprocessing import LabelEncoder
 
+# Reading file and seperating dependent and independent variables.
+dataset = pd.read_excel("irisdataset.xlsx")
+X = dataset.iloc[:, :-1].values
+y = dataset.iloc[:, 4].values
+# data preprocessing: renaming the `Species` column
+# encoding scheme: 0, 1, 2
+labelencoder_y = LabelEncoder()
+y = labelencoder_y.fit_transform(y)
 
-# Excel file is already randomized.
-# simply reading the excel file.
-dfs = pd.read_excel("irisdataset.xlsx")
-#print(dfs)
 
 # splitting the dataset 50% for training anf 50% for testing
-train, test = train_test_split(dfs, test_size=0.5)
-#print(train)
+X_train,X_test, y_train, y_test = train_test_split(X, y, test_size=0.5, random_state=0)
+
+# random weight vector
+weight = np.random.rand(4, 1)
+
+
+
 
 
 

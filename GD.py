@@ -1,8 +1,9 @@
 import numpy as np
 import pandas as pd
+import matplotlib.pyplot as plt
 from sklearn.model_selection import train_test_split
 from sklearn.preprocessing import LabelEncoder
-from sklearn.metrics import mean_squared_error
+
 
 
 def dataPreprocessing():
@@ -29,15 +30,35 @@ def dataPreprocessing():
 
 # cost function
 def cost_func(weights, X, y):
-    yhat = X.dot(weights)
+    yhat = np.dot(X, weights)
     c = 1/2 * np.sum(np.square(y-yhat))
     return c
+
+def gradient_desc(weights, X, y, training_rate = 0.00001, iterations = 1000):
+    yhat = np.dot(X, weights)
+    cost_document = np.zeros(iterations)
+    cost = -1
+    i = 0
+    while(cost == 0 or i < iterations):
+        weights = np.subtract(weights, (-1) * training_rate * np.dot(X.T, (y-yhat)))
+        yhat = np.dot(X, weights)
+        cost = cost_func(weights, X, y)
+        #if(i % 100 == 0):
+        cost_document[i] = cost
+        i = i + 1
+    return weights, cost_document
+
 
 # main function
 def __main__():
    X_train, X_test, y_train, y_test, weights = dataPreprocessing()
-   print(cost_func(weights, X_test, y_test))
+   cost_document = np.zeros(10)
 
+   weights, cost_document = gradient_desc(weights, X_train, y_train)
+
+   y = np.arange(start=1, stop=1001, step=1)
+   plt.plot(y, cost_document)
+   plt.show()
 
 
 # calling main function

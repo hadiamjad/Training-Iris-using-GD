@@ -4,24 +4,41 @@ from sklearn.model_selection import train_test_split
 from sklearn.preprocessing import LabelEncoder
 from sklearn.metrics import mean_squared_error
 
-# Reading file and seperating dependent and independent variables.
-dataset = pd.read_excel("irisdataset.xlsx")
-X = dataset.iloc[:, :-1].values
-y = dataset.iloc[:, 4].values
-# data preprocessing: renaming the `Species` column
-# encoding scheme: 0, 1, 2
-labelencoder_y = LabelEncoder()
-y = labelencoder_y.fit_transform(y)
+
+def dataPreprocessing():
+    # Reading file and seperating dependent and independent variables.
+    dataset = pd.read_excel("irisdataset.xlsx")
+    X = dataset.iloc[:, :-1].values
+    y = dataset.iloc[:, 4].values
+
+    # data preprocessing: renaming the `Species` column
+    # encoding scheme: 0, 1, 2
+    labelencoder_y = LabelEncoder()
+    y = labelencoder_y.fit_transform(y)
+
+    # adding the bias in the X dataset
+    X = np.insert(X, 0, values=1, axis=1)
+
+    # splitting the dataset 50% for training anf 50% for testing
+    X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.5, random_state=0)
+
+    # random weight vector
+    weight = np.random.rand(5, 1)
+
+    return X_train, X_test, y_train, y_test, weight
+
+# cost function
+def cost_func(weights, X, y):
+    yhat = X.dot(weights)
+    c = 1/2 * np.sum(np.square(y-yhat))
+    return c
+
+# main function
+def __main__():
+   X_train, X_test, y_train, y_test, weights = dataPreprocessing()
+   print(cost_func(weights, X_test, y_test))
 
 
-# splitting the dataset 50% for training anf 50% for testing
-X_train,X_test, y_train, y_test = train_test_split(X, y, test_size=0.5, random_state=0)
 
-# random weight vector
-weight = np.random.rand(4, 1)
-
-
-
-
-
-
+# calling main function
+__main__()

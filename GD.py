@@ -37,18 +37,17 @@ def cost_func(weights, X, y):
     c = 1/2 * np.sum(np.square(y-yhat))
     return c
 
-def gradient_desc(weights, X, y, training_rate = 0.0001, iterations = 1000):
+def gradient_desc(weights, X, y, training_rate = 0.000001, iterations = 1000):
     yhat = np.dot(X, weights)
-    cost_document = np.zeros(iterations)
+    cost_document = []
     cost = -1
     i = 0
     while(cost == 0 or i < iterations):
-        weights = np.subtract(weights, (-1) * training_rate * (np.dot((y-yhat).T, X)).T)
-        print(weights.shape)
+        weights = np.subtract(weights, (-1) * training_rate * (np.dot(X.T, (y-yhat))))
         yhat = np.dot(X, weights)
         cost = cost_func(weights, X, y)
-        #if(i % 100 == 0):
-        cost_document[i] = cost
+        if(i % 100 == 0):
+            cost_document.append(cost)
         i = i + 1
     return weights, cost_document
 
@@ -56,11 +55,12 @@ def gradient_desc(weights, X, y, training_rate = 0.0001, iterations = 1000):
 # main function
 def __main__():
    X_train, X_test, y_train, y_test, weights = dataPreprocessing()
-   cost_document = np.zeros(10)
-   #print(y_train.shape)
-   weights, cost_document = gradient_desc(weights, X_train, y_train)
+   cost_document = []
 
-   y = np.arange(start=1, stop=1001, step=1)
+   weights, cost_document = gradient_desc(weights, X_train, y_train)
+   print(cost_document)
+
+   y = np.arange(start=1, stop=11, step=1)
    plt.plot(y, cost_document)
    plt.show()
 

@@ -22,9 +22,12 @@ def dataPreprocessing():
 
     # splitting the dataset 50% for training anf 50% for testing
     X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.5, random_state=0)
+    y_train = np.reshape(y_train, (75, 1))
+    y_test = np.reshape(y_test, (75, 1))
 
     # random weight vector
     weight = np.random.rand(5, 1)
+
 
     return X_train, X_test, y_train, y_test, weight
 
@@ -34,13 +37,14 @@ def cost_func(weights, X, y):
     c = 1/2 * np.sum(np.square(y-yhat))
     return c
 
-def gradient_desc(weights, X, y, training_rate = 0.00001, iterations = 1000):
+def gradient_desc(weights, X, y, training_rate = 0.0001, iterations = 1000):
     yhat = np.dot(X, weights)
     cost_document = np.zeros(iterations)
     cost = -1
     i = 0
     while(cost == 0 or i < iterations):
-        weights = np.subtract(weights, (-1) * training_rate * np.dot(X.T, (y-yhat)))
+        weights = np.subtract(weights, (-1) * training_rate * (np.dot((y-yhat).T, X)).T)
+        print(weights.shape)
         yhat = np.dot(X, weights)
         cost = cost_func(weights, X, y)
         #if(i % 100 == 0):
@@ -53,7 +57,7 @@ def gradient_desc(weights, X, y, training_rate = 0.00001, iterations = 1000):
 def __main__():
    X_train, X_test, y_train, y_test, weights = dataPreprocessing()
    cost_document = np.zeros(10)
-
+   #print(y_train.shape)
    weights, cost_document = gradient_desc(weights, X_train, y_train)
 
    y = np.arange(start=1, stop=1001, step=1)

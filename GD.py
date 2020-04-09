@@ -37,6 +37,7 @@ def cost_func(weights, X, y):
     c = (1/2) * np.sum(np.square(y-yhat))
     return c
 
+# gradient descent function
 def gradient_desc(weights, X, y, training_rate = 0.0001, iterations = 1000):
     yhat = np.dot(X, weights)
     cost_document = []
@@ -51,13 +52,14 @@ def gradient_desc(weights, X, y, training_rate = 0.0001, iterations = 1000):
         i = i + 1
     return weights, cost_document
 
-
+# calculate mismatches
 def calc_mismatches(weights, X, y):
     yhat = np.dot(X, weights)
     yhat = step_func(yhat)
     return np.count_nonzero(y-yhat)
 
 
+# step function
 def step_func(yhat):
     yhat[yhat <= 0.5] = 0
     yhat[yhat > 1.5] = 2

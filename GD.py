@@ -34,10 +34,10 @@ def dataPreprocessing():
 # cost function
 def cost_func(weights, X, y):
     yhat = np.dot(X, weights)
-    c = 1/2 * np.sum(np.square(y-yhat))
+    c = (1/2) * np.sum(np.square(y-yhat))
     return c
 
-def gradient_desc(weights, X, y, training_rate = 0.000001, iterations = 1000):
+def gradient_desc(weights, X, y, training_rate = 0.0001, iterations = 1000):
     yhat = np.dot(X, weights)
     cost_document = []
     cost = -1
@@ -52,16 +52,30 @@ def gradient_desc(weights, X, y, training_rate = 0.000001, iterations = 1000):
     return weights, cost_document
 
 
+def calc_mismatches(weights, X, y):
+    yhat = np.dot(X, weights)
+    yhat = step_func(yhat)
+    return np.count_nonzero(y-yhat)
+
+
+def step_func(yhat):
+    yhat[yhat <= 0.5] = 0
+    yhat[yhat > 1.5] = 2
+    yhat[(yhat > 0.5) & (yhat <= 1.5)] = 1
+    return yhat
+
+
 # main function
 def __main__():
    X_train, X_test, y_train, y_test, weights = dataPreprocessing()
    cost_document = []
 
    weights, cost_document = gradient_desc(weights, X_train, y_train)
-   print(cost_document)
+   print(calc_mismatches(weights, X_test, y_test))
 
-   y = np.arange(start=1, stop=11, step=1)
-   plt.plot(y, cost_document)
+   y = np.arange(start=1, stop=len(cost_document)+1, step=1)
+   print(cost_document)
+   plt.plot(y, cost_document, 'ro')
    plt.show()
 
 

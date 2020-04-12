@@ -21,9 +21,9 @@ def dataPreprocessing():
     X = np.insert(X, 0, values=1, axis=1)
 
     # splitting the dataset 50% for training anf 50% for testing
-    X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.5, random_state=0)
-    y_train = np.reshape(y_train, (75, 1))
-    y_test = np.reshape(y_test, (75, 1))
+    X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=1/3, random_state=0)
+    y_train = np.reshape(y_train, (100, 1))
+    y_test = np.reshape(y_test, (50, 1))
 
     # random weight vector
     weight = np.random.rand(5, 1)
@@ -44,7 +44,7 @@ def gradient_desc(weights, X, y, training_rate = 0.0001, iterations = 1000):
     cost = -1
     i = 0
     while(cost == 0 or i < iterations):
-        weights = np.subtract(weights, (-1) * training_rate * (np.dot(X.T, (y-yhat))))
+        weights = np.subtract(weights, (training_rate * (np.dot(X.T, (yhat-y)))))
         yhat = np.dot(X, weights)
         cost = cost_func(weights, X, y)
         if(i % 100 == 0):
@@ -55,7 +55,7 @@ def gradient_desc(weights, X, y, training_rate = 0.0001, iterations = 1000):
 # calculate mismatches
 def calc_mismatches(weights, X, y):
     yhat = np.dot(X, weights)
-    yhat = step_func(yhat)
+    #yhat = step_func(yhat)
     return np.count_nonzero(y-yhat)
 
 
@@ -77,8 +77,10 @@ def __main__():
 
    y = np.arange(start=1, stop=len(cost_document)+1, step=1)
    print(cost_document)
-   plt.plot(y, cost_document, 'ro')
+   plt.plot(y, cost_document)
    plt.show()
+
+   return 0
 
 
 # calling main function
